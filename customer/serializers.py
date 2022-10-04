@@ -4,8 +4,14 @@ from rest_framework.response import Response
 from .models import *
 import uuid
 
+class CustomerImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomerImage
+        fields = "__all__"
+
 class CustomerSerializer(serializers.ModelSerializer):
     # like_details = serializers.CharField()
+    get_image_url = CustomerImageSerializer(many=True)
 
     class Meta:
         model = Customer
