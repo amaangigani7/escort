@@ -13,12 +13,12 @@ def matches(request):
     if request.user.is_authenticated:
         # breakpoint()
         profile = Customer.objects.get(user_name=request.user)
-        matches = Customer.objects.filter(
+        matches = Customer.objects.filter(is_published=True).filter(
             Q(i_am=profile.looking_for) |
             Q(looking_for=profile.i_am)
         ).exclude(user_name=profile.user_name)
     else:
-        matches = Customer.objects.all()
+        matches = Customer.objects.filter(is_published=True)
     serializer = CustomerSerializer(matches, many=True)
     return Response({'matches': serializer.data})
 

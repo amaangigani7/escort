@@ -1,7 +1,7 @@
 from django.db import models
 from django.utils.translation import gettext_lazy
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
-# from phonenumber_field.modelfields import PhoneNumberField
+from phonenumber_field.modelfields import PhoneNumberField
 from django.template.defaultfilters import slugify
 
 
@@ -34,15 +34,19 @@ class Customer(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(gettext_lazy('email_address'), unique=True)
     user_name = models.CharField(max_length=150, unique=True)
     full_name = models.CharField(max_length=150, null=True)
-    # mobile_number = PhoneNumberField(blank=True, null=True, unique=True)
-    # about = models.TextField(gettext_lazy('about'), max_length=500, blank=True, null=True)
+    mobile_number = PhoneNumberField(blank=True, null=True, unique=True)
+    about = models.TextField(gettext_lazy('about'), max_length=500, blank=True, null=True)
     dob = models.DateTimeField(null=True, blank=True)
     i_am = models.CharField(max_length=255, choices=gender_choices, null=True)
     looking_for = models.CharField(max_length=255, choices=gender_choices, null=True)
     city = models.CharField(max_length=255, null=True, blank=True)
     country = models.CharField(max_length=255, null=True, blank=True)
     age = models.IntegerField(null=True)
-    # height = models.CharField(max_length=100)
+    hair_color = models.CharField(max_length=100, null=True, blank=True)
+    height = models.CharField(max_length=100, null=True, blank=True)
+    weight = models.CharField(max_length=100, null=True, blank=True)
+    sexual_orientation = models.CharField(max_length=100, null=True, blank=True)
+    languages = models.TextField(null=True, blank=True)
     # other_info = models.TextField(blank=True, null=True)
 
     likes_count = models.IntegerField(default=0)
@@ -50,13 +54,15 @@ class Customer(AbstractBaseUser, PermissionsMixin):
     created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=False)
+    is_verified = models.BooleanField(default=False)
+    is_published = models.BooleanField(default=False)
     verification_token = models.CharField(max_length=100, blank=True, null=True)
     forget_password_token = models.CharField(max_length=100, blank=True, null=True)
     
 
     objects = CustomAccountManager()
-    USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['user_name',]
+    USERNAME_FIELD = 'user_name'
+    REQUIRED_FIELDS = ['email',]
 
     @property
     def like_details(self):
@@ -70,5 +76,8 @@ class Customer(AbstractBaseUser, PermissionsMixin):
 
 class CustomerImages(models.Model):
     pass
+
+# class Publish(models.Model):
+#     sent_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
 
 
