@@ -22,7 +22,7 @@ class CustomerSerializer(serializers.ModelSerializer):
 
 
 class AdminPanelRequesteSerializer(serializers.ModelSerializer):
-    customer = CustomerSerializer
+    customer = CustomerSerializer()
     class Meta:
         model = AdminPanelRequest
         fields = "__all__"

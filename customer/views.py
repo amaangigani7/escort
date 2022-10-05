@@ -149,7 +149,6 @@ def user_details_edit(request):
     img_2 = request.data.get('img_2')
     img_3 = request.data.get('img_3')
     img_4 = request.data.get('img_4')
-    print(img_4)
     try:
         # breakpoint()
         customer = Customer.objects.filter(user_name=request.user)
