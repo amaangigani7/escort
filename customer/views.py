@@ -102,26 +102,72 @@ def verify(request, auth_token):
         return HttpResponse(e)
         # return Response({'message': e})
 
+@api_view(['POST'])
+@permission_classes([permissions.IsAuthenticated])
+def apply_for_verification(request):
+    try:
+        customer_images = CustomerImage.objects.get(customer=request.user)
+        if customer_images:
+            req, created = AdminPanelRequest.objects.get_or_create(
+                customer=request.user, 
+                req_type="Verification",
+                img_1 = customer_images.img_1,
+                img_2 = customer_images.img_2,
+                img_3 = customer_images.img_3,
+                img_4 = customer_images.img_4
+                )
+    except:
+        req, created = AdminPanelRequest.objects.get_or_create(
+                customer=request.user, 
+                req_type="Verification"
+                )
+    if created:
+        msg = "New request sent"
+    else:
+        msg = "Updated an existing response"
+    return Response({"msg": msg, "data": AdminPanelRequesteSerializer(req).data})
 
-# @api_view(['POST'])
-# @permission_classes([permissions.IsAuthenticated])
-# def user_details_edit(request):
-#     customer = Customer.objects.get(user_name=request.user)
-#     full_name = request.data.get('full_name')
-#     dob = request.data.get('dob')
-#     mobile_number = request.data.get('mobile_number')
-#     about = request.data.get('about')
-#     other_info = request.data.get('other_info')
-#     height = request.data.get('height')
-#     dob = request.data.get('dob')
-    
-#     about = request.data.get('about')
-#     customer.full_name = full_name
-#     customer.last_name = last_name
-#     customer.about = about
-#     customer.save()
-#     msg = "Account details edited."
-#     return Response({"msg": msg, 'new_data': CustomerSerializer(customer).data})
+
+@api_view(['POST'])
+@permission_classes([permissions.IsAuthenticated])
+def user_details_edit(request):
+    full_name = request.data.get('full_name')
+    dob = request.data.get('dob')
+    # mobile_number = request.data.get('mobile_number')
+    about = request.data.get('about')
+    i_am = request.data.get('i_am')
+    looking_for = request.data.get('looking_for')
+    city = request.data.get('city')
+    country = request.data.get('country')
+    age = request.data.get('age')
+    hair_color = request.data.get('hair_color')
+    weight = request.data.get('weight')
+    sexual_orientation = request.data.get('sexual_orientation')
+    languages = request.data.get('languages')
+    height = request.data.get('height')
+    img_1 = request.data.get('img_1')
+    img_2 = request.data.get('img_2')
+    img_3 = request.data.get('img_3')
+    img_4 = request.data.get('img_4')
+    print(img_4)
+    try:
+        # breakpoint()
+        customer = Customer.objects.filter(user_name=request.user)
+        if len(customer)==1:
+            customer.update(
+                full_name=full_name, about=about, dob=dob, i_am=i_am,
+                looking_for=looking_for, city=city, country=country,
+                age=age, hair_color=hair_color, weight=weight, height=height,
+                sexual_orientation=sexual_orientation, languages=languages
+            )
+            customer[0].customerimage.img_1 = img_1
+            customer[0].customerimage.img_2 = img_2
+            customer[0].customerimage.img_3 = img_3
+            customer[0].customerimage.img_4 = img_4
+            customer[0].customerimage.save()
+        return Response({"msg": "Account details edited.", 'new_data': CustomerSerializer(customer[0]).data})
+    except:
+        return Response({"msg": "Something Went Wrong"})
 
 
 @api_view(['GET'])

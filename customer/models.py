@@ -61,16 +61,13 @@ class Customer(AbstractBaseUser, PermissionsMixin):
     
 
     objects = CustomAccountManager()
-    USERNAME_FIELD = 'user_name'
-    REQUIRED_FIELDS = ['email',]
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['user_name',]
 
     @property
     def get_image_url(self):
         image_obj = self.customerimage
         image_urls = []
-        # for i in CustomerImage._meta.fields:
-        #     lis = ["img_1", "img_2", "img_3", "img_4"]
-        #     if i.name in lis:
         image_urls.append(image_obj)
         return image_urls
 
@@ -94,21 +91,22 @@ class CustomerImage(models.Model):
     def __str__(self):
         return self.customer.user_name
 
-class AdminPanelRequests(models.Model):
+class AdminPanelRequest(models.Model):
     req_type_choices = (("Publish", "Publish"), ("Verification", "Verification"))
-
+    
     customer = models.OneToOneField(Customer, on_delete=models.CASCADE)
     sent_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     req_type = models.CharField(max_length=255, choices=req_type_choices, default="Publish")
-    verify = models.BooleanField(default=False)
-    publish = models.BooleanField(default=False)
+    # verify = models.BooleanField(default=False)
+    # publish = models.BooleanField(default=False)    
+
     img_1 = models.TextField(null=True, blank=True)
     img_2 = models.TextField(null=True, blank=True)
     img_3 = models.TextField(null=True, blank=True)
     img_4 = models.TextField(null=True, blank=True)
 
     def __str__(self):
-        return self.user_name+ "  -  " + self.req_type
+        return self.customer.user_name+ "  -  " + self.req_type
     
 
 

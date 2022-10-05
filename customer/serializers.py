@@ -21,6 +21,12 @@ class CustomerSerializer(serializers.ModelSerializer):
         #             'created_at')
 
 
+class AdminPanelRequesteSerializer(serializers.ModelSerializer):
+    customer = CustomerSerializer
+    class Meta:
+        model = AdminPanelRequest
+        fields = "__all__"
+
 class RegisterSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(max_length=100, min_length=6)
     user_name = serializers.CharField(max_length=100)

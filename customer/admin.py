@@ -40,4 +40,4 @@ class CustomerAdminConfig(UserAdmin):
 
 admin.site.register(Customer, CustomerAdminConfig)
 admin.site.register(CustomerImage)
-admin.site.register(AdminPanelRequests)
+admin.site.register(AdminPanelRequest)

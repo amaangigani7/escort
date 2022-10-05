@@ -17,6 +17,7 @@ urlpatterns = [
     path('forgot_password/' , views.forgot_password , name="forgot_password"),
     path('change_password/<token>/' , views.change_password , name="change_password"),
     # # path('your_account/', views.your_account, name='your_account'),
-    # path('user_details/edit/', views.user_details_edit, name='user_details_edit'),
+    path('user_details/edit/', views.user_details_edit, name='user_details_edit'),
+    path('apply_for_verification/', views.apply_for_verification, name='apply_for_verification'),
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
